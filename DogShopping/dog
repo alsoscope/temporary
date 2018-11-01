@@ -1,0 +1,18 @@
+CREATE table dog(
+	id int not null auto_increment primary key,
+	kind varchar(12) not null,
+	price int not null,
+	image varchar(20) not null,
+	nation varchar(12) not null,
+	height int,
+	weight int,
+	content varchar(400),
+	readcount int
+);
+
+alter table dog change nation country varchar(12);
+
+insert into dog values(0, 'Çªµé', 1000, 'pu.jpg', 'ÇÁ¶û½º', 1, 20, '±Í¿±´Ù', 0);
+insert into dog values(0, 'ºÒµ¶', 2000, 'bul.jpg', 'µ¶ÀÏ', 1, 20, '¸ø»ý°å´Ù', 0);
+insert into dog values(0, 'Áøµµ°³', 3000, 'jin.jpg', '´ëÇÑ¹Î±¹', 1, 20, 'ÃÖ°í´Ù', 0);
+insert into dog values(0, 'Çã½ºÅ°', 4000, 'h.jpg', 'ºÏ±Ø', 1, 20, '¸ÚÁö´Ù', 0);
