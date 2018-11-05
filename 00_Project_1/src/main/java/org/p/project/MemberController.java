@@ -18,103 +18,105 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-//ÇöÀç Å¬·¡½º¸¦ controller bean¿¡ µî·Ï½ÃÅ´
+//í˜„ì¬ í´ë˜ìŠ¤ë¥¼ controller beanì— ë“±ë¡ì‹œí‚´
 @Controller
 public class MemberController {
 
 	private static final Logger logger=LoggerFactory.getLogger(MemberController.class);
 	
-//MemberService °´Ã¼¸¦ ½ºÇÁ¸µ¿¡¼­ »ı¼ºÇÏ¿© ÁÖÀÔ½ÃÅ´
+//MemberService ê°ì²´ë¥¼ ìŠ¤í”„ë§ì—ì„œ ìƒì„±í•˜ì—¬ ì£¼ì…ì‹œí‚´
 @Inject
 MemberService memberService;
 
-	//·Î±×ÀÎ
+	/*
+	//ë¡œê·¸ì¸
 	@RequestMapping(value="/login.do", method=RequestMethod.POST)
 	public String login(MemberVO vo, String userId, String userPw, HttpSession session, Model model)throws NamingException, IOException {
 		MemberVO member=memberService.login(userId, userPw);
 		
 		if(member==null) {
-			model.addAttribute("msg", "·Î±×ÀÎ ½ÇÆĞ");
+			model.addAttribute("msg", "ë¡œê·¸ì¸ ì‹¤íŒ¨");
 			return "login";
 		}
 		model.addAttribute("member", member);
 		return "member/member_list";
 	}
+	*/
 
-	//01 È¸¿ø¸ñ·Ï
+	//01 íšŒì›ëª©ë¡
 	//url pattern mapping
 	@RequestMapping("member/list.do")
 	public String memberList(Model model) {
-		//controller->service->dao ¿äÃ»
+		//controller->service->dao ìš”ì²­
 		List<MemberVO> list=memberService.memberList();
 		model.addAttribute("list",list);
 		return "member/member_list";
 	}
 	
-	//02_01 È¸¿ø µî·Ï ÆäÀÌÁö·Î ÀÌµ¿
+	//02_01 íšŒì› ë“±ë¡ í˜ì´ì§€ë¡œ ì´ë™
 	@RequestMapping("member/write.do")
 	public String memberWrite() {
 		return "member/member_write";
 	}
 	
-	//02_02 È¸¿ø µî·Ï Ã³¸® ÈÄ -> È¸¿ø¸ñ·ÏÀ¸·Î ¸®´ÙÀÌ·ºÆ®
-	//@ModelAttribute¿¡ Æû¿¡¼­ ÀÔ·ÂÇÑ µ¥ÀÌÅÍ°¡ ÀúÀåµÈ´Ù
-	//*Æû¿¡¼­ ÀÔ·ÂÇÑ µ¥ÀÌÅÍ¸¦ ¹Ş¾Æ¿À´Â ¹ı 3°¡Áö
+	//02_02 íšŒì› ë“±ë¡ ì²˜ë¦¬ í›„ -> íšŒì›ëª©ë¡ìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+	//@ModelAttributeì— í¼ì—ì„œ ì…ë ¥í•œ ë°ì´í„°ê°€ ì €ì¥ëœë‹¤
+	//*í¼ì—ì„œ ì…ë ¥í•œ ë°ì´í„°ë¥¼ ë°›ì•„ì˜¤ëŠ” ë²• 3ê°€ì§€
 	//public String memberInsert(HttpServlet request){}
 	//public String memberInsert(String userId, String userPw, String userName){}
 	@RequestMapping("member/insert.do")
 	public String memberInsert(@ModelAttribute MemberVO vo) {
-		//Å×ÀÌºí¿¡ ·¹ÄÚµå ÀÔ·Â
+		//í…Œì´ë¸”ì— ë ˆì½”ë“œ ì…ë ¥
 		memberService.insertMember(vo);
-		//* (/)À¯¹«ÀÇ Â÷ÀÌ
-		// /member/list.do : ·çÆ® µğ·ºÅä¸®¸¦ ±âÁØ
-		// member/list.do : ÇöÀç µğ·ºÅä¸®¸¦ ±âÁØ
-		// member_list.jsp ·Î ¸®´ÙÀÌ·ºÆ®
+		//* (/)ìœ ë¬´ì˜ ì°¨ì´
+		// /member/list.do : ë£¨íŠ¸ ë””ë ‰í† ë¦¬ë¥¼ ê¸°ì¤€
+		// member/list.do : í˜„ì¬ ë””ë ‰í† ë¦¬ë¥¼ ê¸°ì¤€
+		// member_list.jsp ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 		return "redirect:/member/list.do";
 	}
 	
-	//03 È¸¿ø »ó¼¼Á¤º¸ Á¶È¸
+	//03 íšŒì› ìƒì„¸ì •ë³´ ì¡°íšŒ
 	@RequestMapping("member/view.do")
 	public String memberView(String userId, Model model) {
-		//È¸¿ø Á¤º¸¸¦ model¿¡ ÀúÀå
+		//íšŒì› ì •ë³´ë¥¼ modelì— ì €ì¥
 		model.addAttribute("dto", memberService.viewMember(userId));
-		//System.out.println("Å¬¸¯ÇÑ ¾ÆÀÌµğ È®ÀÎ:"+userId);
-		logger.info("Å¬¸¯ÇÑ ¾ÆÀÌµğ : "+userId);
+		//System.out.println("í´ë¦­í•œ ì•„ì´ë”” í™•ì¸:"+userId);
+		logger.info("í´ë¦­í•œ ì•„ì´ë”” : "+userId);
 		return "member/member_view";
 	}
 	
-	//04 È¸¿ø Á¤º¸ ¼öÁ¤ Ã³¸®
+	//04 íšŒì› ì •ë³´ ìˆ˜ì • ì²˜ë¦¬
 	@RequestMapping("member/update.do")
 	public String memberUpdate(@ModelAttribute MemberVO vo, Model model) {
-		//ºñ¹Ğ¹øÈ£ Ã¼Å©
+		//ë¹„ë°€ë²ˆí˜¸ ì²´í¬
 		boolean result=memberService.checkPw(vo.getUserId(), vo.getUserPw());
-		if(result) {//ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏ¸é ¼öÁ¤ Ã³¸® ÈÄ, ÀüÃ¼ È¸¿ø ¸ñ·ÏÀ¸·Î ¸®´ÙÀÌ·ºÆ®
+		if(result) {//ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ë©´ ìˆ˜ì • ì²˜ë¦¬ í›„, ì „ì²´ íšŒì› ëª©ë¡ìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 			memberService.updateMember(vo);
 			return "redirect:/member/list.do";			
-		}else {//ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê´Â´Ù¸é, div¿¡ ºÒÀÏÄ¡ ¹®±¸ Ãâ·Â, view,jsp·Î Æ÷¿öµå
-			//´Ù½Ã µ¿ÀÏÇÑ È­¸éÀ» Ãâ·ÂÇÏ±â À§ÇØ¼­ °¡ÀÔÀÏÀÚ¿Í ¼öÁ¤ÀÏÀÚ ±×¸®°í ºÒÀÏÄ¡ ¹®±¸¸¦ model¿¡ ÀúÀå, »ó¼¼È­¸éÀ¸·Î Æ÷¿öµå
-			//°¡ÀÔÀÏÀÚ, ¼öÁ¤ÀÏÀÚ ÀúÀå
+		}else {//ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠëŠ”ë‹¤ë©´, divì— ë¶ˆì¼ì¹˜ ë¬¸êµ¬ ì¶œë ¥, view,jspë¡œ í¬ì›Œë“œ
+			//ë‹¤ì‹œ ë™ì¼í•œ í™”ë©´ì„ ì¶œë ¥í•˜ê¸° ìœ„í•´ì„œ ê°€ì…ì¼ìì™€ ìˆ˜ì •ì¼ì ê·¸ë¦¬ê³  ë¶ˆì¼ì¹˜ ë¬¸êµ¬ë¥¼ modelì— ì €ì¥, ìƒì„¸í™”ë©´ìœ¼ë¡œ í¬ì›Œë“œ
+			//ê°€ì…ì¼ì, ìˆ˜ì •ì¼ì ì €ì¥
 			MemberVO vo2=memberService.viewMember(vo.getUserId());
 			vo.setUserRegdate(vo2.getUserRegdate());
 			vo.setUserUpdatedate(vo2.getUserUpdatedate());
 			model.addAttribute("dto", vo);
-			model.addAttribute("message", "ºñ¹Ğ¹øÈ£°¡ ¸ÂÁö ¾Ê½À´Ï´Ù");
+			model.addAttribute("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤");
 			return "member/member_view";
 		}
 	}
 	
-	//05 È¸¿øÁ¤º¸ »èÁ¦ Ã³¸®
+	//05 íšŒì›ì •ë³´ ì‚­ì œ ì²˜ë¦¬
 	//@RequestMapping:url mapping
-	//@RequestParam:get or post ¹æ½ÄÀ¸·Î Àü´ŞµÈ º¯¼ö°ª
+	//@RequestParam:get or post ë°©ì‹ìœ¼ë¡œ ì „ë‹¬ëœ ë³€ìˆ˜ê°’
 	@RequestMapping("member/delete.do")
 	public String memberDelete(@RequestParam String userId, @RequestParam String userPw, Model model) {
-		//ºñ¹Ğ¹øÈ£ Ã¼Å©
+		//ë¹„ë°€ë²ˆí˜¸ ì²´í¬
 		boolean result=memberService.checkPw(userId, userPw);
-		if(result) { //ºñ¹Ğ¹øÈ£°¡ ¸Â´Ù¸é »èÁ¦ Ã³¸® ÈÄ, ÀüÃ¼ È¸¿ø ¸ñ·ÏÀ¸·Î ¸®´ÙÀÌ·ºÆ®
+		if(result) { //ë¹„ë°€ë²ˆí˜¸ê°€ ë§ë‹¤ë©´ ì‚­ì œ ì²˜ë¦¬ í›„, ì „ì²´ íšŒì› ëª©ë¡ìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
 			memberService.deleteMember(userId);
 			return "redirect:/member/list.do";
-		}else {//ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê´Â´Ù¸é div¿¡ ºÒÀÏÄ¡ ¹®±¸Ãâ·Â, view.jsp·Î Æ÷¿öµå
-			model.addAttribute("message", "ºñ¹Ğ¹øÈ£°¡ ¸ÂÁö ¾Ê½À´Ï´Ù");
+		}else {//ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠëŠ”ë‹¤ë©´ divì— ë¶ˆì¼ì¹˜ ë¬¸êµ¬ì¶œë ¥, view.jspë¡œ í¬ì›Œë“œ
+			model.addAttribute("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ë§ì§€ ì•ŠìŠµë‹ˆë‹¤");
 			model.addAttribute("dto", memberService.viewMember(userId));
 			return "member/member_view";
 		}
