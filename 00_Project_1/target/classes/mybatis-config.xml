@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd" >
+
+<!-- MyBatis는 SQL Mapping 프레임워크로 별도의 설정 파일을 가질 수 있다 이를 이용하면 스프링의 설정과 별도로 사용하는 모든 MyBatis의 설정 기능을 활용할 수 있다 -->
+<configuration>
+	<typeAliases>
+		<package name="org.p.project"></package>
+	</typeAliases>
+</configuration>
